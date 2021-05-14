@@ -1,8 +1,5 @@
 /**
- * keyPressed mit Wort verbinden
- * Platzhalter für Buchstaben
- * countdown Fehlversuche
- * Game over bei 10. fail
+ * Display all keys that have been tried already
  */
 
 class Game {
