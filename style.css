@@ -1,0 +1,9 @@
+#progress {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+#progress span {
+  margin: 5px;
+}
