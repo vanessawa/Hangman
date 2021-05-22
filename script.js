@@ -2,47 +2,72 @@
  * Display all keys that have been tried already
  */
 
-class Game {
-  solution = "hollywood";
-  failedAttempts = [];
-}
+solution = "hollywood";
+words = ["hollywood", "star", "fame", "boulevard"];
 
-let game = undefined;
 let domProgress = document.querySelector("#progress");
 let domAttemptsRemaining = document.querySelector("#attempts_remaining");
+let failedAttempts = document.querySelector("#wrong");
 
 function startGame() {
-  game = new Game();
+  // clear
+  domProgress.innerHTML = "";
+  failedAttempts.innerHTML = "";
 
-  for (const char of game.solution) {
+  // TODO choose word
+
+  // initialize the charakters
+  for (const char of solution) {
     const domChar = document.createElement("span");
     domChar.innerText = "_";
     domChar.setAttribute("data-spoiler", char);
     domProgress.appendChild(domChar);
   }
-  updateAttempts();
+  updateGameState();
 }
 
 function guess(char) {
-  const matches = document.querySelectorAll(
-    'span[data-spoiler="' + char + '"]'
-  );
-  matches.forEach((span) => {
+  if (failedAttempts.children.length === 10) {
+    alert("game over");
+    return;
+  }
+
+  const charSelector = 'span[data-spoiler="' + char + '"]';
+  const viewMatches = domProgress.querySelectorAll(charSelector);
+  const failedMatches = failedAttempts.querySelectorAll(charSelector);
+
+  viewMatches.forEach((span) => {
     span.innerText = char;
   });
 
-  if (matches.length === 0 && !game.failedAttempts.includes(char)) {
-    game.failedAttempts.push(char);
-    updateAttempts();
+  if (viewMatches.length === 0 && failedMatches.length === 0) {
+    const domChar = document.createElement("span");
+    domChar.innerText = char;
+    failedAttempts.appendChild(domChar);
+  }
+  updateGameState();
+}
+
+function updateGameState() {
+  document.body.style.backgroundColor = "white";
+
+  if (domProgress.innerText === solution) {
+    document.body.style.backgroundColor = "green";
+    domAttemptsRemaining.innerText = "You won";
+    return;
+  }
+
+  let attemptsRemaining = 10 - failedAttempts.children.length;
+
+  if (attemptsRemaining === 0) {
+    domAttemptsRemaining.innerText = "You fail";
+    document.body.style.backgroundColor = "red";
+    return;
   }
 }
 
-function updateAttempts() {
-  domAttemptsRemaining.innerText = 10 - game.failedAttempts.length;
-}
-
-document.body.addEventListener("keydown", (event) => {
-  guess(event.key);
-});
+document.body.addEventListener("keypress", (event) =>
+  guess(event.key.toLocaleLowerCase())
+);
 
 startGame();
