@@ -51,9 +51,9 @@ function guess(char) {
 function updateGameState() {
   document.body.style.backgroundColor = "white";
 
-  if (domProgress.innerText === solution) {
+  if (domProgress.innerHTML == solution) {
     document.body.style.backgroundColor = "green";
-    domAttemptsRemaining.innerText = "You won";
+    domAttemptsRemaining.innerHTML = "You won";
     return;
   }
 
